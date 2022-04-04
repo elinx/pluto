@@ -64,6 +64,7 @@ func fileListPanel() *tview.Table {
 		SetSelectable(true, false).
 		SetFixed(1, 1).
 		SetSelectedStyle(style)
+	table.SetBorder(true)
 	return table
 }
 
