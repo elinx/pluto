@@ -55,10 +55,15 @@ func NewMiddlePanel() *MiddlePanel {
 }
 
 func fileListPanel() *tview.Table {
+	style := tcell.Style{}.
+		Background(tcell.ColorDimGray).
+		Foreground(tcell.ColorPurple).
+		Attributes(0)
+
 	table := tview.NewTable().
-		SetBorders(true).
 		SetSelectable(true, false).
-		SetFixed(1, 1)
+		SetFixed(1, 1).
+		SetSelectedStyle(style)
 	return table
 }
 
