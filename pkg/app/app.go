@@ -18,6 +18,7 @@ func NewApp(rootPath string) *App {
 }
 
 func (app *App) Run() {
+	app.ui.SetupKeyboard(app.Application)
 	if err := app.SetRoot(app.ui, true).Run(); err != nil {
 		panic(err)
 	}

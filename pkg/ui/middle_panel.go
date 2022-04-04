@@ -26,6 +26,7 @@ func NewMiddlePanel() *MiddlePanel {
 	commandPanel := tview.NewBox().SetBorder(true).SetTitle("Command")
 	directoryView := fileListPanel()
 	fileContentView := tview.NewTextView()
+	fileContentView.SetBorder(true)
 	mainPanel := tview.NewPages().
 		AddPage(DirectoryView, directoryView, true, true).
 		AddPage(FileView, fileContentView, true, true)
