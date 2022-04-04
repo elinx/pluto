@@ -7,14 +7,13 @@ import (
 	"github.com/pluto/pkg/app"
 )
 
-func logConfig() {
-	f, err := os.OpenFile("pluto.log", os.O_RDWR|os.O_CREATE, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer f.Close()
+var (
+	logFile, _ = os.OpenFile("pluto.log", os.O_RDWR|os.O_CREATE, 0666)
+)
 
-	log.SetOutput(f)
+func logConfig() {
+	log.SetOutput(logFile)
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 	log.Println("start loging...")
 }
 

@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/pluto/pkg/util"
 	"github.com/rivo/tview"
 )
 
@@ -32,6 +33,9 @@ func leftTreePanel(rootPath string) *tview.TreeView {
 }
 
 func addTreeNode(root *tview.TreeNode, rootPath string) {
+	if !util.IsDir(rootPath) {
+		return
+	}
 	files, err := os.ReadDir(rootPath)
 	if err != nil {
 		log.Fatalf("read dir error: %v", err)
@@ -39,7 +43,6 @@ func addTreeNode(root *tview.TreeNode, rootPath string) {
 	for _, file := range files {
 		node := tview.NewTreeNode(file.Name()).
 			SetReference(filepath.Join(rootPath, file.Name())).
-			SetSelectable(file.IsDir()).
 			SetColor(tcell.ColorGreen)
 		if file.IsDir() {
 			node.SetColor(tcell.ColorRed)
