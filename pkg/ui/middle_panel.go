@@ -6,33 +6,50 @@ import (
 	"strconv"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/pluto/pkg/util"
 	"github.com/rivo/tview"
+)
+
+const (
+	DirectoryView = "Directory"
+	FileView      = "File"
 )
 
 type MiddlePanel struct {
 	*tview.Flex
-	commandPanel  *tview.Box
-	fileListPanel *tview.Table
-	statusPanel   *tview.Box
+	commandPanel *tview.Box
+	mainPanel    *tview.Pages
+	statusPanel  *tview.Box
 }
 
 func NewMiddlePanel() *MiddlePanel {
 	commandPanel := tview.NewBox().SetBorder(true).SetTitle("Command")
-	fileList := fileListPanel()
+	directoryView := fileListPanel()
+	fileContentView := tview.NewTextView()
+	mainPanel := tview.NewPages().
+		AddPage(DirectoryView, directoryView, true, true).
+		AddPage(FileView, fileContentView, true, true)
 	statusPanel := tview.NewBox().SetBorder(true).SetTitle("Status")
 	middlePanel := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(commandPanel, 0, 1, false).
-		AddItem(fileList, 0, 5, true).
+		AddItem(mainPanel, 0, 5, true).
 		AddItem(statusPanel, 2, 1, false)
 	RegisterOnSelectionCallback("middle", func(rootPath string) {
-		fileList.Clear()
-		feedTable(fileList, rootPath)
+		if util.IsDir(rootPath) {
+			directoryView.Clear()
+			feedTable(directoryView, rootPath)
+			mainPanel.SwitchToPage(DirectoryView)
+		} else {
+			fileContentView.Clear()
+			feedContent(fileContentView, rootPath)
+			mainPanel.SwitchToPage(FileView)
+		}
 	})
 	return &MiddlePanel{
-		Flex:          middlePanel,
-		commandPanel:  commandPanel,
-		fileListPanel: fileList,
-		statusPanel:   statusPanel,
+		Flex:         middlePanel,
+		commandPanel: commandPanel,
+		mainPanel:    mainPanel,
+		statusPanel:  statusPanel,
 	}
 }
 
@@ -79,4 +96,12 @@ func filesProvider(rootPath string) [][]string {
 		})
 	}
 	return content
+}
+
+func feedContent(contentView *tview.TextView, rootPath string) {
+	content, err := os.ReadFile(rootPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	contentView.SetText(string(content))
 }
