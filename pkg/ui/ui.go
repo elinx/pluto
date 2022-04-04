@@ -18,7 +18,7 @@ func NewUI(rootPath string) *UI {
 	flex := tview.NewFlex().
 		AddItem(leftTreeView, 0, 1, true).
 		AddItem(middlePanel, 0, 3, false).
-		AddItem(rightPanel, 3, 1, false)
+		AddItem(rightPanel, 20, 1, false)
 	return &UI{
 		Flex:        flex,
 		leftPanel:   leftTreeView,
