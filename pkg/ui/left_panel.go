@@ -48,12 +48,21 @@ func addTreeNode(root *tview.TreeNode, rootPath string) {
 	}
 }
 
+var onSelectionCallbacks = make(map[string]func(string))
+
+func RegisterOnSelectionCallback(path string, callback func(string)) {
+	onSelectionCallbacks[path] = callback
+}
+
 func treeSelectionFunc(root *tview.TreeNode) {
 	reference := root.GetReference()
 	if reference == nil {
 		return
 	}
 	path := reference.(string)
+	for _, callback := range onSelectionCallbacks {
+		callback(path)
+	}
 	log.Println("tree selection func: ", path)
 	if len(root.GetChildren()) == 0 {
 		addTreeNode(root, path)

@@ -24,6 +24,10 @@ func NewMiddlePanel() *MiddlePanel {
 		AddItem(commandPanel, 0, 1, false).
 		AddItem(fileList, 0, 5, true).
 		AddItem(statusPanel, 2, 1, false)
+	RegisterOnSelectionCallback("middle", func(rootPath string) {
+		fileList.Clear()
+		feedTable(fileList, rootPath)
+	})
 	return &MiddlePanel{
 		Flex:          middlePanel,
 		commandPanel:  commandPanel,
@@ -40,8 +44,8 @@ func fileListPanel() *tview.Table {
 	return table
 }
 
-func feedTable(table *tview.Table) {
-	contents := filesProvider()
+func feedTable(table *tview.Table, rootPath string) {
+	contents := filesProvider(rootPath)
 	for i, v := range contents {
 		for j, vv := range v {
 			color := tcell.ColorDefault
@@ -55,12 +59,12 @@ func feedTable(table *tview.Table) {
 	}
 }
 
-func filesProvider() [][]string {
+func filesProvider(rootPath string) [][]string {
 	title := []string{
 		"Name", "Szie", "Kind", "Date Added",
 	}
 	content := [][]string{title}
-	files, err := os.ReadDir(".")
+	files, err := os.ReadDir(rootPath)
 	if err != nil {
 		log.Fatalf("read dir error: %v", err)
 	}

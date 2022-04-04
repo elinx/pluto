@@ -17,7 +17,7 @@ func NewUI(rootPath string) *UI {
 	rightPanel := tview.NewBox().SetBorder(true).SetTitle("Right (20 cols)")
 	flex := tview.NewFlex().
 		AddItem(leftTreeView, 0, 1, true).
-		AddItem(middlePanel, 0, 3, false).
+		AddItem(middlePanel, 0, 3, true).
 		AddItem(rightPanel, 20, 1, false)
 	return &UI{
 		Flex:        flex,
