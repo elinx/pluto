@@ -20,6 +20,10 @@ func NewLeftPanel(rootPath string) *LeftPanel {
 	}
 }
 
+func (l *LeftPanel) GetCurrentRootPath() string {
+	return l.GetCurrentNode().GetReference().(string)
+}
+
 func leftTreePanel(rootPath string) *tview.TreeView {
 	root := tview.NewTreeNode(rootPath).
 		SetColor(tcell.ColorRed)

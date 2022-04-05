@@ -1,6 +1,8 @@
 package util
 
-import "os"
+import (
+	"os"
+)
 
 func IsDir(rootPath string) bool {
 	if file, err := os.Stat(rootPath); err != nil {
@@ -8,4 +10,12 @@ func IsDir(rootPath string) bool {
 	} else {
 		return file.IsDir()
 	}
+}
+
+func HomeDir() string {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		homeDir = "/"
+	}
+	return homeDir
 }

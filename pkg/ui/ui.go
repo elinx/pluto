@@ -43,3 +43,7 @@ func (ui *UI) SetupKeyboard(app *tview.Application) {
 		return event
 	})
 }
+
+func (ui *UI) GetCurrentRootPath() string {
+	return ui.leftPanel.GetCurrentRootPath()
+}
